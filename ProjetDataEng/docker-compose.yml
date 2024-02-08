@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - mynetwork
+
+
+
+  scrapy:
+    build:
+      context: .
+      dockerfile: Dockerfile.scrapy
+    container_name: scrapy-1
+    depends_on:
+      - 'mongo'
+    environment:
+      - MONGO_HOST=mongodb
+
+    volumes:
+      - .:/spiders  
+    networks:
+      - mynetwork
+    
+
+  flask:
+    depends_on:
+      - 'mongo'
+      - 'scrapy'
+    build:
+      context: .
+      dockerfile: Dockerfile.flask
+    environment:
+      - MONGO_HOST=mongodb
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  mongodb_data_container:

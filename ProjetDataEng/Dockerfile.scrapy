@@ -1,0 +1,15 @@
+# Utilisation de l'image Python officielle comme base
+FROM python:3.8
+
+# Définition du répertoire de travail dans le conteneur
+# Cela doit être le répertoire où se trouve scrapy.cfg
+WORKDIR /spiders
+
+# Copier tous les fichiers du dossier actuel dans le répertoire de travail du conteneur
+COPY . .
+ENV PYTHONPATH=$PYTHONPATH:/C:/Users/gdaie/Documents/6Evaluation/ProjetDataEng/
+# Installer les dépendances Python avec pip
+RUN pip install --no-cache-dir scrapy pymongo itemadapter
+
+# Exécuter le spider nommé 'mon_spider'
+CMD ["scrapy", "crawl", "mon_spider"]

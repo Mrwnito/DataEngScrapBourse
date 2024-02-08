@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Indices CAC40 & SBF120</title>
+    <!-- Inclusion de Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #000; /* Noir */
+            color: #fff; /* Blanc */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .title-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #333; /* Un gris foncé pour le fond */
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        /* Appliquer un style spécifique pour les titres pour les rendre plus lisibles */
+        h1, h2 {
+            color: #fff; /* Blanc */
+            text-align: center;
+        }
+    
+        .charts-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+    
+        .chart-item {
+            flex: 1 1 300px; /* Les éléments flex prendront au moins 300px et s'étendront si possible */
+            max-width: calc(50% - 20px); /* Calcule une largeur maximale en soustrayant l'espacement entre les éléments */
+            box-shadow: 0 0 10px rgba(255,255,255,0.1); /* Ajoute une ombre pour mieux distinguer les cartes */
+            padding: 5px;
+            box-sizing: border-box;
+            background: #222; /* Fond gris foncé pour les conteneurs de graphiques */
+            border-radius: 8px; /* Adoucit les coins des conteneurs de graphiques */
+            margin-bottom: 5px; /* Espacement entre les graphiques */
+        }
+    
+        @media (max-width: 768px) {
+            .chart-item {
+                max-width: 100%; /* Sur les petits écrans, chaque élément de graphique prend la largeur complète */
+            }
+        }
+    
+        /* Assurez-vous que les canvas prennent toute la largeur de leur conteneur */
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+    
+        /* Personnalisez les tooltips de Chart.js si nécessaire */
+        .tooltip {
+            background-color: #444; /* Gris plus clair pour les tooltips */
+            color: #fff; /* Texte blanc pour les tooltips */
+            border-radius: 4px;
+            padding: 5px;
+        }
+    
+        /* Personnaliser les couleurs des légendes si nécessaire */
+        .legend {
+            color: #fff; /* Texte blanc pour les légendes */
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="title-container">
+        <h1>Comparaison entre le CAC 40 et d'autres bourses françaises</h1>    
+    </div>
+    <!-- Conteneurs pour les graphiques des indices individuels -->
+    <div class="charts-grid">
+        <div class="chart-item">
+            <h2>CAC 40</h2>
+            <canvas id="cac40Chart"></canvas>
+        </div>
+        <!-- Conteneur pour le graphique des pourcentages de changement -->
+        <div class="chart-item">
+            <h2>Pourcentage de Changement pour Tous les Indices</h2>
+            <canvas id="percentageChangeChart"></canvas>
+        </div>
+    </div>
+    <div class="charts-grid">  
+        <div class="chart-item">
+            <h2>ENT PEA PME 150</h2>
+            <canvas id="entpeapme150Chart"></canvas>
+        </div>
+        <div class="chart-item">
+            <h2>SBF 120</h2>
+            <canvas id="sbf120Chart"></canvas>
+        </div>
+        <div class="chart-item">
+            <h2>CAC 40 ESG</h2>
+            <canvas id="cac40esgChart"></canvas>
+        </div>
+        
+    </div>
+
+
+    <script>
+        // Configuration commune pour les graphiques
+        const chartOptions = {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    position: 'left', // Positionner cet axe à droite
+                    // Assure-toi que l'axe y utilise une échelle qui correspond aux données du CAC40
+                    // Tu peux ajuster 'suggestedMin' et 'suggestedMax' comme nécessaire
+                    grid: {
+                        drawOnChartArea: true, // pour ne pas dessiner la grille pour l'axe 'y1'
+                    },
+                }   
+                
+                        
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            }
+        };
+        // Exemple de données pour le CAC 40
+        const cac40Data = {
+            labels: {{ labels_cac_40|tojson|safe }},
+            datasets: [{
+                label: 'CAC 40',
+                data: {{ dataPoints_cac_40|tojson|safe }},
+                borderColor: 'rgba(45, 184, 107, 1)',
+                backgroundColor: 'rgba(45, 184, 107, 0.5)',
+                borderWidth: 2,
+                pointRadius: 0, // Les points sont toujours cachés normalement
+                pointHoverRadius: 5, // Taille du point lors du survol
+                pointHitRadius: 10, // Rayon pour la détection du survol
+                pointBorderWidth: 2,
+                fill: true,
+            }]
+        };
+
+        // Initialisation du graphique CAC 40
+        const cac40Ctx = document.getElementById('cac40Chart').getContext('2d');
+        const cac40Chart = new Chart(cac40Ctx, {
+            type: 'line',
+            data: cac40Data,
+            options: chartOptions
+        });
+
+        // Exemple de données pour le SBF 120
+        const sbf120Data = {
+            labels: {{ labels_sbf_120|tojson|safe }},
+            datasets: [{
+                label: 'SBF 120',
+                data: {{ dataPoints_sbf_120|tojson|safe }},
+                borderColor: 'rgba(88, 211, 241, 1)',
+                backgroundColor: 'rgba(88, 211, 241, 0.5)',
+                borderWidth: 2,
+                pointRadius: 0, // Les points sont toujours cachés normalement
+                pointHoverRadius: 5, // Taille du point lors du survol
+                pointHitRadius: 10, // Rayon pour la détection du survol
+                pointBorderWidth: 2,
+                fill: true,
+            }]
+        };
+
+        // Initialisation du graphique SBF 120
+        const sbf120Ctx = document.getElementById('sbf120Chart').getContext('2d');
+        const sbf120Chart = new Chart(sbf120Ctx, {
+            type: 'line',
+            data: sbf120Data,
+            options: chartOptions
+        });
+        // Exemple de données pour le CAC 40 ESG
+        const cac40esgData = {
+            labels: {{ labels_cac_40_esg|tojson|safe }},
+            datasets: [{
+                label: 'CAC 40 ESG',
+                data: {{ dataPoints_cac_40_esg|tojson|safe }},
+                borderColor: 'rgba(12, 135, 44, 1)',
+                backgroundColor: 'rgba(12, 135, 44, 0.5)',
+                borderWidth: 2,
+                pointRadius: 0, // Les points sont toujours cachés normalement
+                pointHoverRadius: 5, // Taille du point lors du survol
+                pointHitRadius: 10, // Rayon pour la détection du survol
+                pointBorderWidth: 2,
+                fill: true,
+            }]
+        };
+
+        // Initialisation du graphique CAC 40 ESG
+        const cac40esgCtx = document.getElementById('cac40esgChart').getContext('2d');
+        const cac40esgChart = new Chart(cac40esgCtx, {
+            type: 'line',
+            data: cac40esgData,
+            options: chartOptions
+        });
+
+        // Exemple de données pour le ENT PEA PME 150
+        const entpeapme150Data = {
+            labels: {{ labels_ent_pea_pme_150|tojson|safe }},
+            datasets: [{
+                label: 'ENT PEA PME 150',
+                data: {{ dataPoints_ent_pea_pme_150|tojson|safe }},
+                borderColor: 'rgba(139, 173, 208, 1)',
+                backgroundColor: 'rgba(139, 173, 208, 0.5)',
+                borderWidth: 2,
+                pointRadius: 0, // Les points sont toujours cachés normalement
+                pointHoverRadius: 5, // Taille du point lors du survol
+                pointHitRadius: 10, // Rayon pour la détection du survol
+                pointBorderWidth: 2,
+                fill: true
+            }]
+        };
+
+        // Initialisation du graphique ENT PEA PME 150
+        const entpeapme150Ctx = document.getElementById('entpeapme150Chart').getContext('2d');
+        const entpeapme150Chart = new Chart(entpeapme150Ctx, {
+            type: 'line',
+            data: entpeapme150Data,
+            options: chartOptions
+        });
+
+        // Exemple de configuration pour le graphique combiné des pourcentages de changement
+        const percentageChangeData = {
+            labels: {{ labels_sbf_120|tojson|safe }},
+            datasets: 
+            [
+                {
+                    label: 'Pourcentage de changement CAC40',
+                    data: {{ percent_changes_cac_40 | tojson | safe }},
+                    pointRadius: 0, // Les points sont toujours cachés normalement
+                    pointHoverRadius: 5, // Taille du point lors du survol
+                    pointHitRadius: 10, // Rayon pour la détection du survol
+                    pointBorderWidth: 2,
+                    borderColor: 'rgba(45, 184, 107, 1)',
+                    backgroundColor: 'rgba(45, 184, 107, 0.5)',
+                    fill: false,
+                },
+                {
+                    label: 'Pourcentage de changement SBF120',
+                    data: {{ percent_changes_sbf_120 | tojson | safe }},
+                    pointRadius: 0, // Les points sont toujours cachés normalement
+                    pointHoverRadius: 5, // Taille du point lors du survol
+                    pointHitRadius: 10, // Rayon pour la détection du survol
+                    pointBorderWidth: 2,
+                    borderColor: 'rgba(88, 211, 241, 1)',
+                    backgroundColor: 'rgba(88, 211, 241, 0.5)',
+                    fill: false,
+                },
+                {
+                    label: 'Pourcentage de changement CAC40ESG',
+                    data: {{ percent_changes_cac_40_esg | tojson | safe }},
+                    pointRadius: 0, // Les points sont toujours cachés normalement
+                    pointHoverRadius: 5, // Taille du point lors du survol
+                    pointHitRadius: 10, // Rayon pour la détection du survol
+                    pointBorderWidth: 2,
+                    borderColor: 'rgba(12, 135, 44, 1)',
+                    backgroundColor: 'rgba(12, 135, 44, 0.5)',
+                    fill: false,
+                },
+                {
+                    label: 'Pourcentage de changement ENT PEA PME 150',
+                    data: {{ percent_changes_ent_pea_pme_150 | tojson | safe }},
+                    pointRadius: 0, // Les points sont toujours cachés normalement
+                    pointHoverRadius: 5, // Taille du point lors du survol
+                    pointHitRadius: 10, // Rayon pour la détection du survol
+                    pointBorderWidth: 2,
+                    borderColor: 'rgba(139, 173, 208, 1)',
+                    backgroundColor: 'rgba(139, 173, 208, 0.5)',
+                    fill: false,
+                }
+            ]
+        };
+
+        // Initialisation du graphique des pourcentages de changement
+        const percentageChangeCtx = document.getElementById('percentageChangeChart').getContext('2d');
+        const percentageChangeChart = new Chart(percentageChangeCtx, {
+            type: 'line',
+            data: percentageChangeData,
+            options: chartOptions
+        });
+
+    </script>
+</body>
+</html>
