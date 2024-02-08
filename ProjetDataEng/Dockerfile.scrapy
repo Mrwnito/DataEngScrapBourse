@@ -1,15 +1,26 @@
-# Utilisation de l'image Python officielle comme base
+# Utilise l'image officielle Python version 3.8 comme image de base.
+# Cela assure que vous disposez d'un environnement Python propre et à jour pour exécuter votre spider Scrapy.
 FROM python:3.8
 
-# Définition du répertoire de travail dans le conteneur
-# Cela doit être le répertoire où se trouve scrapy.cfg
+# Définit le répertoire de travail dans le conteneur Docker.
+# Ce répertoire est utilisé comme point de départ pour l'exécution des commandes et des scripts.
+# Il est important de noter que ce répertoire doit contenir le fichier scrapy.cfg pour que Scrapy fonctionne correctement.
 WORKDIR /spiders
 
-# Copier tous les fichiers du dossier actuel dans le répertoire de travail du conteneur
+# Copie tous les fichiers du dossier source (où se trouve le Dockerfile) dans le répertoire de travail du conteneur.
+# Cela inclut tous les scripts Python, les fichiers de configuration Scrapy, et d'autres ressources nécessaires.
 COPY . .
+
+# Définit la variable d'environnement PYTHONPATH.
+# Cela permet à Python de trouver vos modules et packages personnalisés situés dans des répertoires spécifiques.
+# Assurez-vous que le chemin est correctement défini pour correspondre à la structure de votre projet.
 ENV PYTHONPATH=$PYTHONPATH:/C:/Users/gdaie/Documents/6Evaluation/ProjetDataEng/
-# Installer les dépendances Python avec pip
+
+# Installe les dépendances Python nécessaires en utilisant pip.
+# --no-cache-dir assure que les packages sont téléchargés à chaque fois pour garantir que vous avez les versions les plus récentes.
 RUN pip install --no-cache-dir scrapy pymongo itemadapter
 
-# Exécuter le spider nommé 'mon_spider'
+# Commande par défaut à exécuter lorsque le conteneur démarre.
+# Ici, elle lance le spider Scrapy nommé 'mon_spider'.
+# Assurez-vous que 'mon_spider' correspond au nom de votre spider dans le projet Scrapy.
 CMD ["scrapy", "crawl", "mon_spider"]
