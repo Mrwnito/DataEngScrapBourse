@@ -1,24 +1,30 @@
-# Utiliser une image de base Python
+# Utilise l'image officielle Python version 3.8 comme base pour garantir un environnement d'exécution stable et prévisible.
 FROM python:3.8
 
-
-
+# Définit /app comme répertoire de travail dans le conteneur.
+# Toutes les commandes qui suivent seront exécutées dans ce répertoire.
 WORKDIR /app
 
-# Copier tous les fichiers du dossier actuel dans le répertoire de travail du conteneur
+# Copie le contenu du dossier actuel (où se trouve le Dockerfile) dans le répertoire de travail du conteneur.
+# Cela inclut votre application Flask et toutes les autres dépendances ou fichiers nécessaires.
 COPY . .
-# Installer les dépendances
+
+# Installe les dépendances Python spécifiées dans votre fichier requirements.txt ou individuellement via pip.
+# --no-cache-dir désactive le cache pip pour réduire la taille de l'image et s'assurer que les packages sont à jour.
 RUN pip install --no-cache-dir flask itemadapter pymongo
 
+# Expose le port 8080 sur lequel l'application Flask sera accessible depuis l'extérieur du conteneur.
 EXPOSE 8080
 
-
-# Définir la variable d'environnement pour Flask
+# Définit les variables d'environnement nécessaires pour l'exécution de Flask.
+# PYTHONPATH inclut le chemin vers votre application pour que Python puisse la localiser correctement.
+# FLASK_APP spécifie le fichier d'entrée de votre application Flask.
+# FLASK_RUN_HOST configure Flask pour qu'il soit accessible sur toutes les interfaces réseau du conteneur.
 ENV PYTHONPATH=$PYTHONPATH:/C:/Users/gdaie/Documents/6Evaluation/ProjetDataEng/
 ENV FLASK_APP=ProjetDataEng.app.app
 ENV FLASK_RUN_HOST=0.0.0.0
 
-
-
-# Commande pour exécuter l'application Flask
+# Définit la commande par défaut pour exécuter l'application Flask lorsque le conteneur démarre.
+# "--host=0.0.0.0" permet à Flask d'être accessible sur toutes les interfaces réseau du conteneur.
+# "--port=8080" spécifie le port sur lequel Flask doit écouter.
 CMD ["flask", "run", "--host=0.0.0.0", "--port=8080"]
