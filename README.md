@@ -23,17 +23,22 @@ Le projet est développé en utilisant :
 - **Docker** : Utilisé pour conteneuriser l'application et faciliter le déploiement.
 
 ## Structure du Projet
-
 ProjetDataEng/
-├── spiders/
-│ ├── mon_spider.py
-│ └── ...
-├── pipelines.py
-├── app.py
-├── Dockerfile.scrapy
-├── Dockerfile.flask
-├── docker-compose.yml
-└── requirements.txt
+|-- ProjetDataEng/
+|   |-- app/
+|   |   |-- app.py
+|   |   |-- templates/
+|   |       |-- index.html
+|   |-- spiders/
+|   |   |-- mon_spider.py
+|   |-- pipelines.py
+|   |-- middlewares.py
+|   |-- settings.py
+|-- scrapy.cfg
+|-- Dockerfile.scrapy
+|-- Dockerfile.flask
+|-- docker-compose.yml
+    
 
 
 ## Installation et Lancement
@@ -46,7 +51,7 @@ ProjetDataEng/
 ### Instructions
 
 1. **Cloner le dépôt Git :**
-`git clone https://votre-depot.git`
+`git clone https://github.com/Mrwnito/DataEngScrapBourse`
 `cd ProjetDataEng`
 
 2. **Lancer l'application :**
@@ -57,15 +62,5 @@ Utilisez Docker Compose pour construire et démarrer les services.
 3. **Accéder à l'application :**
 Ouvrez votre navigateur et allez à `http://localhost:8080` pour voir l'application en action.
 
-## Architecture
 
-Décrivez ici l'architecture de votre application, y compris comment les différentes parties (extraction des données, base de données, backend, frontend) interagissent entre elles.
-
-## Contribution
-
-Expliquez comment les autres développeurs peuvent contribuer à votre projet. Incluez les directives pour les contributions, les tests et les pull requests.
-
-## Licence
-
-Indiquez la licence sous laquelle votre projet est distribué.
 
