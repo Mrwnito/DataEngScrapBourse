@@ -24,7 +24,7 @@ Le projet est développé en utilisant :
 
 ## Structure du Projet
 
-    
+![Structure](/DataEngImages/Structure.png)
 
 
 ## Installation et Lancement
@@ -40,11 +40,13 @@ Le projet est développé en utilisant :
 
 `git clone https://github.com/Mrwnito/DataEngScrapBourse`
 
+![Build](/DataEngImages/Build.png)
+
 `cd DataEngScrapBourse\ProjetDataEng`
 
 2. **Lancer l'application :**
 
-Lancer Docker. [Image Docker Desktop]
+Lancer Docker. ![Docker](/DataEngImages/Docker.png)
 
 Utilisez Docker Compose pour construire et démarrer les services en utilisant la commande suivante :
 
@@ -55,7 +57,7 @@ Utilisez Docker Compose pour construire et démarrer les services en utilisant l
 Ouvrez votre navigateur et allez à [`http://localhost:8080`](http://localhost:8080/) pour voir l'application en action.
 
 
-[Image Rendu final]
+![Visuel](/DataEngImages/Visuel.png)
 
 
 
