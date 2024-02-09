@@ -66,6 +66,7 @@ ProjetDataEng/
 
 1. **Cloner le dépôt Git :**
 `git clone https://github.com/Mrwnito/DataEngScrapBourse`
+
 `cd ProjetDataEng`
 
 2. **Lancer l'application :**
