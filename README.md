@@ -24,19 +24,33 @@ Le projet est développé en utilisant :
 
 ## Structure du Projet
 ProjetDataEng/
+
 |-- ProjetDataEng/
+
 |   |-- app/
+
 |   |   |-- app.py
+
 |   |   |-- templates/
+
 |   |       |-- index.html
+
 |   |-- spiders/
+
 |   |   |-- mon_spider.py
+
 |   |-- pipelines.py
+
 |   |-- middlewares.py
+
 |   |-- settings.py
+
 |-- scrapy.cfg
+
 |-- Dockerfile.scrapy
+
 |-- Dockerfile.flask
+
 |-- docker-compose.yml
     
 
