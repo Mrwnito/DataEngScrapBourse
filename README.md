@@ -46,7 +46,9 @@ Le projet est développé en utilisant :
 
 2. **Lancer l'application :**
 
-Lancer Docker. ![Docker](/DataEngImages/Docker.png)
+Lancer Docker. 
+
+![Docker](/DataEngImages/Docker.png)
 
 Utilisez Docker Compose pour construire et démarrer les services en utilisant la commande suivante :
 
@@ -55,6 +57,8 @@ Utilisez Docker Compose pour construire et démarrer les services en utilisant l
 3. **Accéder à l'application :**
 
 Ouvrez votre navigateur et allez à [`http://localhost:8080`](http://localhost:8080/) pour voir l'application en action.
+
+
 
 
 ![Visuel](/DataEngImages/Visuel.png)
