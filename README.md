@@ -23,35 +23,7 @@ Le projet est développé en utilisant :
 - **Docker** : Utilisé pour conteneuriser l'application et faciliter le déploiement.
 
 ## Structure du Projet
-ProjetDataEng/
 
-|-- ProjetDataEng/
-
-|   |-- app/
-
-|   |   |-- app.py
-
-|   |   |-- templates/
-
-|   |       |-- index.html
-
-|   |-- spiders/
-
-|   |   |-- mon_spider.py
-
-|   |-- pipelines.py
-
-|   |-- middlewares.py
-
-|   |-- settings.py
-
-|-- scrapy.cfg
-
-|-- Dockerfile.scrapy
-
-|-- Dockerfile.flask
-
-|-- docker-compose.yml
     
 
 
@@ -65,17 +37,25 @@ ProjetDataEng/
 ### Instructions
 
 1. **Cloner le dépôt Git :**
+
 `git clone https://github.com/Mrwnito/DataEngScrapBourse`
 
-`cd ProjetDataEng`
+`cd DataEngScrapBourse\ProjetDataEng`
 
 2. **Lancer l'application :**
-Utilisez Docker Compose pour construire et démarrer les services.
+
+Lancer Docker. [Image Docker Desktop]
+
+Utilisez Docker Compose pour construire et démarrer les services en utilisant la commande suivante :
 
 `docker-compose up --build`
 
 3. **Accéder à l'application :**
-Ouvrez votre navigateur et allez à `http://localhost:8080` pour voir l'application en action.
+
+Ouvrez votre navigateur et allez à [`http://localhost:8080`](http://localhost:8080/) pour voir l'application en action.
+
+
+[Image Rendu final]
 
 
 
